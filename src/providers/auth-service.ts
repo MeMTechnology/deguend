@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-//import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from "rxjs/Observable";
+
 
 export class User {
   nome: string;
   cpf: number;
+ 
   static logout(): any {
       throw new Error("Method not implemented.");
   }
@@ -14,13 +15,16 @@ export class User {
     this.nome = nome;
     this.cpf = cpf;
   }
+
 }
 
 @Injectable()
 export class AuthService {
+
   currentUser: User;
-  
+
   public login(credentials) {
+
      if (credentials.cpf === null || credentials.senha === null) {
        return Observable.throw("Insira os dados");
      } else {
