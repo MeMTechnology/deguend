@@ -1,5 +1,4 @@
 import { Agentes } from './../../agentes';
-import { RemoteService } from './../../providers/remote-service';
 import { Observable } from 'rxjs/Observable';
 import { Http} from '@angular/http';
 import { HomePage } from './../home/home';
@@ -14,18 +13,17 @@ import { Component, ViewChild } from '@angular/core';
 export class LoginPage {
   registerCredentials: any = {cpf: '', senha: ''};
   loading: Loading;
-  agentes: Agentes;
+  agentes = [];
   
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private auth: AuthService, 
-    private alertCtrl: AlertController,private loadingCtrl: LoadingController, private http:Http, private remoteService: RemoteService) {}
-
+    private alertCtrl: AlertController,private loadingCtrl: LoadingController, private http:Http, ) { }
   
   public login() {
 
     this.showLoading();
 
-    this.auth.login(this.registerCredentials).subscribe(allowed => {
+    this.auth.login(this.registerCredentials, this.agentes).subscribe(allowed => {
       if (allowed) {        
         this.navCtrl.setRoot(HomePage);
       } else {
@@ -57,14 +55,11 @@ export class LoginPage {
   }
   
   ionViewDidLoad() {
-    console.log('ionViewDidLoad Login');
 
-    this.remoteService.getUsuarios()
-                .do(data => this.agentes = data)
-                .subscribe((data: Agentes) => this.agentes = data,
-                error => console.log(error));
-    
-    console.log(this.agentes);
+    this.http.get('http://localhost:8080/usuarios').map(res => res.json())
+      .subscribe(result => {
+      this.agentes = result
+      });
 
   }
 

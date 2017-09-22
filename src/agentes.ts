@@ -1,4 +1,5 @@
-export class Agentes{      
+export class Agentes{
+          
     public cod: number;
     public nome: string;
     public sexo: string;

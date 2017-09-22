@@ -10,7 +10,6 @@ import { CircuitoPage } from './../pages/circuito/circuito';
 import { FormularioPage } from './../pages/formulario/formulario';
 import { InfoPage } from './../pages/info/info';
 
-import { RemoteService } from './../providers/remote-service';
 import { AuthService } from './../providers/auth-service';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -43,8 +42,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthService,
-    RemoteService
+    AuthService
   ]
 })
 export class AppModule {}

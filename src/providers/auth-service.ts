@@ -1,6 +1,7 @@
+import { Agentes } from './../agentes';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Rx'
 
 
 export class User {
@@ -23,20 +24,36 @@ export class AuthService {
 
   currentUser: User;
 
-  public login(credentials) {
+  public login(credentials, agentes) {
 
-     if (credentials.cpf === null || credentials.senha === null) {
-       return Observable.throw("Insira os dados");
-     } else {
-       return Observable.create(observer => {
-         // At this point make a request to your backend to make a real check
-         let access = (credentials.senha === "matheus" && credentials.cpf == 13400445606);
-         this.currentUser = new User(credentials.cpf, 'matheus');
-         console.log(this.currentUser.cpf);
-         observer.next(access);
-         observer.complete();
-       });
-     }
+
+      if (credentials.cpf === null || credentials.senha === null) {
+        return Observable.throw("Insira os dados");
+      } else {
+
+        for(let i = 0; i < agentes.length; i++){
+          
+          let str = agentes[i].cpf;
+          let cpfStr = credentials.cpf.toString();
+      
+          str = str.replace(/[!@#$%^&*.-]/g,"");
+
+          if(credentials.senha === agentes[i].senha && cpfStr === str){
+            return Observable.create(observer => {
+            // At this point make a request to your backend to make a real check
+            let access = (credentials.senha === agentes[i].senha && cpfStr === str);
+            this.currentUser = new User(credentials.cpf, agentes[i].nome);
+            console.log(this.currentUser);
+            observer.next(access);
+            observer.complete();
+            });
+          }
+        }
+
+        return Observable.throw("Dados incorretos");
+
+      }
+     
   }
 
   public getUserInfo() : User {
