@@ -9,12 +9,14 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
   nome = '';
-  cpf = '';
+  //cpf = '';
+  cod;
 
   constructor(public navCtrl: NavController, private auth: AuthService) {
-    let info = this.auth.getUserInfo;
+    let info = this.auth.getUserInfo();
     this.nome = info['nome'];
-    this.cpf = info['cpf'];
+    this.cod = info['cod'];
+    //console.log("COD: "+this.cod+" NOME:"+this.nome);
   }
 
   public logout() {

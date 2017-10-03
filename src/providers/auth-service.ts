@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Rx'
 
 
 export class User {
+  cod: number;
   nome: string;
   cpf: number;
  
@@ -12,9 +13,10 @@ export class User {
       throw new Error("Method not implemented.");
   }
 
-  constructor(cpf: number, nome: string) {
+  constructor(cpf: number, nome: string, cod: number) {
     this.nome = nome;
     this.cpf = cpf;
+    this.cod = cod;
   }
 
 }
@@ -42,7 +44,7 @@ export class AuthService {
             return Observable.create(observer => {
             // At this point make a request to your backend to make a real check
             let access = (credentials.senha === agentes[i].senha && cpfStr === str);
-            this.currentUser = new User(credentials.cpf, agentes[i].nome);
+            this.currentUser = new User(credentials.cpf, agentes[i].nome, agentes[i].cod);
             console.log(this.currentUser);
             observer.next(access);
             observer.complete();
@@ -57,7 +59,9 @@ export class AuthService {
   }
 
   public getUserInfo() : User {
+    //console.log("TEST:"+this.currentUser);
     return this.currentUser;
+    //return user;
   }
 
   public logout() {
