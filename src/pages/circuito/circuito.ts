@@ -2,6 +2,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { AuthService } from './../../providers/auth-service';
 import { Http} from '@angular/http';
+import { Geolocation } from '@ionic-native/geolocation';
 
 declare var google;
 
@@ -19,7 +20,8 @@ export class CircuitoPage {
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
   map: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthService, private http:Http,) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthService, 
+    private http:Http,private geolocation: Geolocation) {
     let info = this.auth.getUserInfo();
     this.codAgente = info['cod'];
     console.log("Agente Cod: "+this.codAgente);
@@ -100,12 +102,15 @@ export class CircuitoPage {
     
      }
 
-    addMarker(){
-      
+    addMarker(data){
+      let test2 = this.map.getCenter();
+      var myLatLng = {lat: data.coords.latitude, lng: data.coords.longitude};
+      //let xJon = JSON.parse(test2);
        let marker = new google.maps.Marker({
          map: this.map,
          animation: google.maps.Animation.DROP,
-         position: this.map.getCenter()
+         //position: this.map.getCenter()
+         position: myLatLng
        });
       
        let content = "<h4>Information!</h4>";          
@@ -124,6 +129,26 @@ export class CircuitoPage {
          infoWindow.open(this.map, marker);
        });
       
+     }
+
+     getLocation(){
+      this.geolocation.getCurrentPosition().then((resp) => {
+        // resp.coords.latitude
+        // resp.coords.longitude
+       }).catch((error) => {
+         console.log('Error getting location', error);
+       });
+       
+       let watch = this.geolocation.watchPosition().subscribe((data) => {
+        // data can be a set of coordinates, or an error (if an error occurred).
+        // data.coords.latitude
+        // data.coords.longitude
+        //console.log("Long: "+data.coords.longitude);
+        //console.log("Lat: "+data.coords.latitude);
+        this.addMarker(data);
+        watch.unsubscribe();
+  
+       });
      }
 
 }
