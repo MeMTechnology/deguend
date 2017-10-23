@@ -1,3 +1,4 @@
+import { Formulario } from './../formulario/formulario';
 import { NavController, NavParams } from 'ionic-angular';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { AuthService } from './../../providers/auth-service';
@@ -33,7 +34,7 @@ export class CircuitoPage {
   }
 
   getDataPoints(){
-    this.http.get('http://localhost:8080/getRouteByAgente/'+this.codAgente).map(res => res.json())
+    this.http.get('http://10.1.3.107:8080/getRouteByAgente/'+this.codAgente).map(res => res.json())
     .subscribe(result => {
     this.pontosRoute = result;
     //console.log("Result: "+JSON.stringify(this.pontosRoute));
@@ -102,6 +103,10 @@ export class CircuitoPage {
     
      }
 
+     vaiMerda(){
+       console.log("Oh shit!");
+     }
+
     addMarker(data){
       let test2 = this.map.getCenter();
       var myLatLng = {lat: data.coords.latitude, lng: data.coords.longitude};
@@ -113,20 +118,23 @@ export class CircuitoPage {
          position: myLatLng
        });
       
-       let content = "<h4>Information!</h4>";          
+       //let content = '<h4>Information!</h4>';          
       
-       this.addInfoWindow(marker, content);
+       this.addInfoWindow(marker);
       
      }
 
-     addInfoWindow(marker, content){
+
+     addInfoWindow(marker){
+       var conteudo = "<button onclick='pushPage()'>Go to Form</button>";
       
        let infoWindow = new google.maps.InfoWindow({
-         content: content
+         content: conteudo
        });
       
        google.maps.event.addListener(marker, 'click', () => {
          infoWindow.open(this.map, marker);
+         this.navCtrl.push(Formulario);
        });
       
      }
@@ -151,4 +159,9 @@ export class CircuitoPage {
        });
      }
 
+}
+
+function pushPage(){
+  console.log("maeaadf");
+ this.navCtrl.push(Formulario);
 }

@@ -7,8 +7,8 @@ import { MyApp } from './app.component';
 import { LoginPage } from './../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { CircuitoPage } from './../pages/circuito/circuito';
-import { FormularioPage } from './../pages/formulario/formulario';
 import { InfoPage } from './../pages/info/info';
+import { Formulario} from './../pages/formulario/formulario';
 
 import { AuthService } from './../providers/auth-service';
 
@@ -23,7 +23,7 @@ import { Geolocation } from '@ionic-native/geolocation';
     HomePage,
     CircuitoPage,
     InfoPage,
-    FormularioPage
+    Formulario
   ],
   imports: [
     BrowserModule,
@@ -37,7 +37,7 @@ import { Geolocation } from '@ionic-native/geolocation';
     HomePage,
     CircuitoPage,
     InfoPage,
-    FormularioPage
+    Formulario
   ],
   providers: [
     StatusBar,

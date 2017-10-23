@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   selector: 'page-formulario',
   templateUrl: 'formulario.html',
 })
-export class FormularioPage {
+export class Formulario {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
