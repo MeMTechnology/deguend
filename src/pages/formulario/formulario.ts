@@ -10,8 +10,13 @@ export class Formulario {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
+  public submitForm(){
+    console.log("Merda...");
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad Formulario');
   }
+
+;
 
 }

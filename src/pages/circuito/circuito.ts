@@ -1,5 +1,5 @@
 import { Formulario } from './../formulario/formulario';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { AuthService } from './../../providers/auth-service';
 import { Http} from '@angular/http';
@@ -20,9 +20,12 @@ export class CircuitoPage {
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
   map: any;
+   myMark : any;
+   testPosition : any;
+   markerTest: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthService, 
-    private http:Http,private geolocation: Geolocation) {
+    private http:Http,private geolocation: Geolocation, public alertCtrl: AlertController) {
     let info = this.auth.getUserInfo();
     this.codAgente = info['cod'];
     console.log("Agente Cod: "+this.codAgente);
@@ -34,7 +37,7 @@ export class CircuitoPage {
   }
 
   getDataPoints(){
-    this.http.get('http://10.1.3.107:8080/getRouteByAgente/'+this.codAgente).map(res => res.json())
+    this.http.get('http://192.168.2.15:8080/getRouteByAgente/'+this.codAgente).map(res => res.json())
     .subscribe(result => {
     this.pontosRoute = result;
     //console.log("Result: "+JSON.stringify(this.pontosRoute));
@@ -52,6 +55,7 @@ export class CircuitoPage {
 
   loadRoute(pontos){
     var myTest =JSON.parse(pontos[0].pontosRota);
+    this.testPosition = myTest;
     //console.log("TESTE: "+JSON.stringify(myTest));
     this.geraRotaByPoints(myTest);
   }
@@ -99,17 +103,15 @@ export class CircuitoPage {
        this.directionsDisplay = new google.maps.DirectionsRenderer({
         map: this.map
     });
-       this.directionsDisplay.setMap(this.map);
+       
+   this.directionsDisplay.setMap(this.map);
+     }
     
-     }
-
-     vaiMerda(){
-       console.log("Oh shit!");
-     }
 
     addMarker(data){
       let test2 = this.map.getCenter();
       var myLatLng = {lat: data.coords.latitude, lng: data.coords.longitude};
+      this.myMark = myLatLng;
       //let xJon = JSON.parse(test2);
        let marker = new google.maps.Marker({
          map: this.map,
@@ -121,20 +123,19 @@ export class CircuitoPage {
        //let content = '<h4>Information!</h4>';          
       
        this.addInfoWindow(marker);
-      
      }
 
 
      addInfoWindow(marker){
-       var conteudo = "<button onclick='pushPage()'>Go to Form</button>";
+       //var conteudo = "<button onclick='pushPage()'>Go to Form</button>";
       
-       let infoWindow = new google.maps.InfoWindow({
+       /*let infoWindow = new google.maps.InfoWindow({
          content: conteudo
-       });
+       });*/
       
        google.maps.event.addListener(marker, 'click', () => {
-         infoWindow.open(this.map, marker);
-         this.navCtrl.push(Formulario);
+        // infoWindow.open(this.map, marker);
+         this.pushPageFunction();
        });
       
      }
@@ -148,20 +149,55 @@ export class CircuitoPage {
        });
        
        let watch = this.geolocation.watchPosition().subscribe((data) => {
-        // data can be a set of coordinates, or an error (if an error occurred).
-        // data.coords.latitude
-        // data.coords.longitude
-        //console.log("Long: "+data.coords.longitude);
-        //console.log("Lat: "+data.coords.latitude);
+       
         this.addMarker(data);
         watch.unsubscribe();
   
        });
      }
 
+     presentAlert(){
+      let alert = this.alertCtrl.create({
+        title: 'Está fora da Rota',
+        buttons: ['OK']
+      });
+      alert.present();
+     }
+
+      pushPageFunction(){
+      //FONTE:
+      //https://developers.google.com/maps/documentation/javascript/geometry#isLocationOnEdge
+      let myPosition = new google.maps.LatLng(this.myMark.lat, this.myMark.lng);
+      
+      let i;
+      let t1 = [];
+      let myPath = '{"path":[';
+      for (i =0; i < this.testPosition.length; i++){
+        t1.push(new google.maps.LatLng(this.testPosition[i].location.lat,this.testPosition[i].location.lng));
+        myPath += JSON.stringify(t1[i]);
+        if(i == this.testPosition.length -1)
+          continue;
+        myPath += ", ";
+      }
+      myPath +="]}";
+
+      let cascadia = new google.maps.Polyline(JSON.parse(myPath));
+
+      //console.log("Lets see!!"+JSON.stringify(cascadia)+ "  END");
+
+      //A função retorna true se a distância entre o ponto e o ponto mais próximo na linha ou borda 
+      //está dentro da tolerância especificada. A tolerância padrão é 10-9 graus.
+      if(google.maps.geometry.poly.isLocationOnEdge(myPosition, cascadia, 1e-4)){//1e-4 tá bom. 1e-5 é muito perto.
+        //1e-5 equivale a 0,00001. Quanto maior é o número maior é o alcance
+        console.log("Dentro do Limite:");
+        this.navCtrl.push(Formulario);
+      }
+      else{
+        this.presentAlert();
+
+      }
+      
+     }
+
 }
 
-function pushPage(){
-  console.log("maeaadf");
- this.navCtrl.push(Formulario);
-}
