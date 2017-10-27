@@ -15,15 +15,22 @@
   
       <form class="list" name="contato" (ngSubmit)="submitForm()" novalidate>
         <ion-item>
-            <ion-label >Responsável</ion-label>
-            <ion-input minlength="2" required></ion-input>
-          </ion-item>
-          <ion-item>
             <ion-label >Endereço</ion-label>
             <ion-input minlength="2" required></ion-input>
           </ion-item>
+
           <ion-item>
-            <ion-label >Referência</ion-label>
+            <ion-label >Número</ion-label>
+            <ion-input minlength="2" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label >Complemento</ion-label>
+            <ion-input minlength="2" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Nome do Morador</ion-label>
             <ion-input minlength="2" required></ion-input>
           </ion-item>
         <button ion-button class="button button-positive button-block" type="submit">Salvar</button>

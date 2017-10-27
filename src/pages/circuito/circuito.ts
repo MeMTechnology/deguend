@@ -37,7 +37,7 @@ export class CircuitoPage {
   }
 
   getDataPoints(){
-    this.http.get('http://192.168.2.15:8080/getRouteByAgente/'+this.codAgente).map(res => res.json())
+    this.http.get('http://localhost:8080/getRouteByAgente/'+this.codAgente).map(res => res.json())
     .subscribe(result => {
     this.pontosRoute = result;
     //console.log("Result: "+JSON.stringify(this.pontosRoute));
@@ -187,7 +187,9 @@ export class CircuitoPage {
 
       //A função retorna true se a distância entre o ponto e o ponto mais próximo na linha ou borda 
       //está dentro da tolerância especificada. A tolerância padrão é 10-9 graus.
-      if(google.maps.geometry.poly.isLocationOnEdge(myPosition, cascadia, 1e-4)){//1e-4 tá bom. 1e-5 é muito perto.
+
+      //COMENTAR O IF-ELSE PARA DESABILITAR A VALIDAÇÃO DE POSIÇÃO
+      /*if(google.maps.geometry.poly.isLocationOnEdge(myPosition, cascadia, 1e-4)){//1e-4 tá bom. 1e-5 é muito perto.
         //1e-5 equivale a 0,00001. Quanto maior é o número maior é o alcance
         console.log("Dentro do Limite:");
         this.navCtrl.push(Formulario);
@@ -195,7 +197,8 @@ export class CircuitoPage {
       else{
         this.presentAlert();
 
-      }
+      }*/
+      this.navCtrl.push(Formulario);
       
      }
 

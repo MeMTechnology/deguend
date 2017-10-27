@@ -56,7 +56,7 @@ export class LoginPage {
   
   ionViewDidLoad() {
 
-    this.http.get('http://192.168.2.15:8080/usuarios').map(res => res.json())
+    this.http.get('http://localhost:8080/usuarios').map(res => res.json())
       .subscribe(result => {
       this.agentes = result
       });
