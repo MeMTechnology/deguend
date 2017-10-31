@@ -13,31 +13,42 @@
   
 <ion-content padding>
   
-      <form class="list" name="contato" (ngSubmit)="submitForm()" novalidate>
+      <form [formGroup]="visita" (ngSubmit)="postForm()">
         <ion-item>
             <ion-label >Endereço</ion-label>
-            <ion-input minlength="2" required></ion-input>
+            <ion-input formControlName="endereco" ></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label >Número</ion-label>
-            <ion-input minlength="2" required></ion-input>
+            <ion-input formControlName="numero"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label >Complemento</ion-label>
-            <ion-input minlength="2" required></ion-input>
+            <ion-input formControlName="complemento"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label>Nome do Morador</ion-label>
-            <ion-input minlength="2" required></ion-input>
+            <ion-input formControlName="morador"></ion-input>
           </ion-item>
-        <button ion-button class="button button-positive button-block" type="submit">Salvar</button>
+
+          <ion-item>
+            <ion-label>Há foco ou criadouro?</ion-label>
+            <ion-input formControlName="isFoco"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Descrição</ion-label>
+            <ion-input minlength="2" formControlName="descricao"></ion-input>
+          </ion-item>
+
+
+        <button [disabled]="visita.invalid" ion-button class="button button-positive button-block">Salvar</button>
 
       </form>
     
-      
-  
 </ion-content>
+<!--link bem explicadinho: https://www.youtube.com/watch?v=oAr6J2ZGXig -->
   

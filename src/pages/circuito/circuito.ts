@@ -23,6 +23,7 @@ export class CircuitoPage {
    myMark : any;
    testPosition : any;
    markerTest: any;
+   myPosition: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthService, 
     private http:Http,private geolocation: Geolocation, public alertCtrl: AlertController) {
@@ -141,6 +142,9 @@ export class CircuitoPage {
      }
 
      getLocation(){
+       //*** */
+      //this.navCtrl.push(Formulario);
+      /**  */
       this.geolocation.getCurrentPosition().then((resp) => {
         // resp.coords.latitude
         // resp.coords.longitude
@@ -157,6 +161,10 @@ export class CircuitoPage {
      }
 
      presentAlert(){
+       /*Essa função pega minha minha posição atual e compara a distância que estou da rota.
+       Se estiver suficientemente perto da rota, o IF me deixa ir para o formulário, senão aparece 
+       uma mensagem de aviso
+       */
       let alert = this.alertCtrl.create({
         title: 'Está fora da Rota',
         buttons: ['OK']
@@ -167,7 +175,8 @@ export class CircuitoPage {
       pushPageFunction(){
       //FONTE:
       //https://developers.google.com/maps/documentation/javascript/geometry#isLocationOnEdge
-      let myPosition = new google.maps.LatLng(this.myMark.lat, this.myMark.lng);
+      this.myPosition = new google.maps.LatLng(this.myMark.lat, this.myMark.lng);
+     // console.log("My Position: "+JSON.stringify(myPosition));
       
       let i;
       let t1 = [];
@@ -198,7 +207,7 @@ export class CircuitoPage {
         this.presentAlert();
 
       }*/
-      this.navCtrl.push(Formulario);
+      this.navCtrl.push(Formulario, {myPosition: this.myPosition});
       
      }
 
