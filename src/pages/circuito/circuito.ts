@@ -24,15 +24,17 @@ export class CircuitoPage {
    testPosition : any;
    markerTest: any;
    myPosition: any;
+   codRota: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthService, 
     private http:Http,private geolocation: Geolocation, public alertCtrl: AlertController) {
     let info = this.auth.getUserInfo();
     this.codAgente = info['cod'];
-    console.log("Agente Cod: "+this.codAgente);
+    //console.log("Agente Cod: "+this.codAgente);
   }
 
   ionViewDidLoad() {
+    this.myMark = null;
     this.loadMap();
     this.getDataPoints();
   }
@@ -55,6 +57,7 @@ export class CircuitoPage {
   }
 
   loadRoute(pontos){
+    this.codRota = pontos[0].cod;
     var myTest =JSON.parse(pontos[0].pontosRota);
     this.testPosition = myTest;
     //console.log("TESTE: "+JSON.stringify(myTest));
@@ -142,8 +145,8 @@ export class CircuitoPage {
      }
 
      getLocation(){
-       //*** */
-      //this.navCtrl.push(Formulario);
+      
+      //this.navCtrl.push(Formulario, {codRota: this.codRota, myPosition: {"lat":-22.2198788,"lng":-45.916122599999994}});
       /**  */
       this.geolocation.getCurrentPosition().then((resp) => {
         // resp.coords.latitude
@@ -176,7 +179,7 @@ export class CircuitoPage {
       //FONTE:
       //https://developers.google.com/maps/documentation/javascript/geometry#isLocationOnEdge
       this.myPosition = new google.maps.LatLng(this.myMark.lat, this.myMark.lng);
-     // console.log("My Position: "+JSON.stringify(myPosition));
+      console.log("My Position: "+JSON.stringify(this.myPosition));
       
       let i;
       let t1 = [];
@@ -198,16 +201,18 @@ export class CircuitoPage {
       //está dentro da tolerância especificada. A tolerância padrão é 10-9 graus.
 
       //COMENTAR O IF-ELSE PARA DESABILITAR A VALIDAÇÃO DE POSIÇÃO
-      /*if(google.maps.geometry.poly.isLocationOnEdge(myPosition, cascadia, 1e-4)){//1e-4 tá bom. 1e-5 é muito perto.
+      if(google.maps.geometry.poly.isLocationOnEdge(this.myPosition, cascadia, 1e-3)){//1e-4 tá bom. 1e-5 é muito perto.
         //1e-5 equivale a 0,00001. Quanto maior é o número maior é o alcance
         console.log("Dentro do Limite:");
-        this.navCtrl.push(Formulario);
+        this.navCtrl.push(Formulario, {codRota: this.codRota, myPosition: this.myPosition});
       }
       else{
         this.presentAlert();
 
-      }*/
-      this.navCtrl.push(Formulario, {myPosition: this.myPosition});
+      }
+      
+      //this.navCtrl.push(Formulario, {codRota: this.codRota, myPosition: this.myPosition});
+      //this.navCtrl.push(Formulario, {myPosition: {"lat":-22.2198788,"lng":-45.916122599999994}});
       
      }
 

@@ -36,7 +36,7 @@
 
           <ion-item>
             <ion-label>Há foco ou criadouro?</ion-label>
-            <ion-input formControlName="isFoco"></ion-input>
+            <ion-toggle formControlName="isFoco" (ionChange)="notifiy()"></ion-toggle>
           </ion-item>
 
           <ion-item>
@@ -44,8 +44,19 @@
             <ion-input minlength="2" formControlName="descricao"></ion-input>
           </ion-item>
 
+          <ion-item>
+            <ion-label>Visita não foi realizada?</ion-label>
+            <ion-toggle formControlName="isVisita" (ionChange)="notifiyTwo()"></ion-toggle>
+          </ion-item>
 
-        <button [disabled]="visita.invalid" ion-button class="button button-positive button-block">Salvar</button>
+          <ion-item>
+            <ion-label>Motivo</ion-label>
+            <ion-input minlength="2" formControlName="motivo"></ion-input>
+          </ion-item>
+
+
+        <!--button <[disabled]="visita.invalid" ion-button class="button button-positive button-block">Salvar</button-->
+        <button ion-button class="button button-positive button-block">Salvar</button>
 
       </form>
     
