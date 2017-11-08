@@ -1,3 +1,4 @@
+import { HomePage } from './../home/home';
 import { Formulario } from './../formulario/formulario';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Component, ViewChild, ElementRef } from '@angular/core';
@@ -35,16 +36,27 @@ export class CircuitoPage {
 
   ionViewDidLoad() {
     this.myMark = null;
-    this.loadMap();
+    //this.loadMap();
     this.getDataPoints();
   }
 
   getDataPoints(){
     this.http.get('http://localhost:8080/getRouteByAgente/'+this.codAgente).map(res => res.json())
     .subscribe(result => {
-    this.pontosRoute = result;
-    //console.log("Result: "+JSON.stringify(this.pontosRoute));
-    this.loadRoute(result);
+      if(result == ""){
+        let alert = this.alertCtrl.create({
+          title: 'Nenhuma Rota cadastrada',
+          buttons: ['OK']
+        });
+        this.navCtrl.setRoot(HomePage); 
+        alert.present();
+      }
+      else{
+      this.pontosRoute = result;
+      //console.log("Result: "+JSON.stringify(this.pontosRoute));
+      this.loadMap(); //Se não tiver nenhuma rota cadastrada nem carrega o mapa.
+      this.loadRoute(result);
+      }
     });
   }
 
