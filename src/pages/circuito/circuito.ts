@@ -51,7 +51,19 @@ export class CircuitoPage {
         this.navCtrl.setRoot(HomePage); 
         alert.present();
       }
+      else if(result[0].status == 1){
+        //Se a rota já está definida como concluída.
+        let alert = this.alertCtrl.create({
+          title: 'Aguardando lançamento da rota',
+          buttons: ['OK']
+        });
+        this.navCtrl.setRoot(HomePage); 
+        alert.present();
+
+      }
       else{
+        //console.log("VAI TIAO"+JSON.stringify(result));
+        //console.log("RESUlT:"+result[0].status);
       this.pontosRoute = result;
       //console.log("Result: "+JSON.stringify(this.pontosRoute));
       this.loadMap(); //Se não tiver nenhuma rota cadastrada nem carrega o mapa.
@@ -158,7 +170,30 @@ export class CircuitoPage {
 
      endRoute(){
        console.log("Finaliza rota:");
+       this.http.post('http://localhost:8080/finalizaRota',{"codAgente":this.codAgente})
+       .subscribe(res => {
+       console.log(res.json().sim);
+       this.avisaEvolta(res.json().sim);
+     });
+
      }
+     avisaEvolta(result){
+      let alert;
+      if(result == "yes"){
+        alert = this.alertCtrl.create({
+          title: 'Rota Encerrada',
+          buttons: ['OK']
+        });
+      }
+      else{
+        alert = this.alertCtrl.create({
+          title: 'Erro!',
+          buttons: ['OK']
+        });
+      }
+      alert.present();
+      this.navCtrl.setRoot(HomePage);
+    }
 
      getLocation(){
       
