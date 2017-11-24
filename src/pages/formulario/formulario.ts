@@ -29,16 +29,16 @@ export class Formulario {
       complemento:['',Validators.required],
       morador:['',Validators.required],
       isFoco:[false,Validators.required],
-      descricao:[{value: null, disabled: true}, Validators.required],
+      descricao:[{value: null, disabled: false}, Validators.required],
       isVisita:[false,Validators.required],
-      motivo:[{value: null, disabled: true}, Validators.required]
+      motivo:[{value: null, disabled: false}, Validators.required]
 
     }); 
   }
 
   public notifiy(){
     if(this.visita.controls['isFoco'].value == true){
-      this.visita.controls['descricao'].enable();
+     // this.visita.controls['descricao'].enable();
       this.isFocoValue = 1;
     }
     else{
@@ -50,7 +50,7 @@ export class Formulario {
 
   public notifiyTwo(){
     if(this.visita.controls['isVisita'].value == true){
-      this.visita.controls['motivo'].enable();
+      //this.visita.controls['motivo'].enable();
       this.isMotivo = 1;
     }
     else{

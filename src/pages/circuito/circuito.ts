@@ -156,6 +156,10 @@ export class CircuitoPage {
       
      }
 
+     endRoute(){
+       console.log("Finaliza rota:");
+     }
+
      getLocation(){
       
       //this.navCtrl.push(Formulario, {codRota: this.codRota, myPosition: {"lat":-22.2198788,"lng":-45.916122599999994}});
